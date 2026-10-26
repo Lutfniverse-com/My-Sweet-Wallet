@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Sweet Wallet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@0,600;1,500&family=Quicksand:wght@400;500;600;700&display=swap">
+<style>
+:root{--m:#d3126f;--md:#9c0b52;--ml:#fde3f0;--bg:#fff6fa;--card:#fff;--tx:#3d0f27;--mu:#8a5a72;--ln:#f6cde1;--ok:#1f8a5b;--warn:#c4123f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--m:#f04b9b;--md:#ff8cc3;--ml:#4a1632;--bg:#1d0a15;--card:#2a1120;--tx:#fde8f2;--mu:#d6a2bc;--ln:#4d2037;--ok:#5fd6a0;--warn:#ff7a9a;color-scheme:dark}}
+:root[data-theme="dark"]{--m:#f04b9b;--md:#ff8cc3;--ml:#4a1632;--bg:#1d0a15;--card:#2a1120;--tx:#fde8f2;--mu:#d6a2bc;--ln:#4d2037;--ok:#5fd6a0;--warn:#ff7a9a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Quicksand',system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 48px}
+header{text-align:center;padding:28px 12px 18px;background:var(--m);color:#fff;border-radius:0 0 40px 40px;margin:0 -16px 22px}
+header h1{font-family:'Pacifico',cursive;font-weight:400;font-size:clamp(2rem,7vw,3rem);margin:0}
+header p{font-family:'Playfair Display',Georgia,serif;font-style:italic;margin:4px 0 14px;opacity:.92}
+.mon{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#9c0b52;border-radius:99px;padding:6px 14px;font-weight:600}
+.mon input{border:0;background:none;font:inherit;color:inherit;outline:none}
+h2{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:1.35rem;margin:0 0 12px;color:var(--m)}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:22px;padding:18px}
+.sum .card small{color:var(--mu);font-weight:600}
+.sum .card b{display:block;font-size:1.5rem;margin-top:2px}
+.sum .saldo{background:var(--m);border-color:var(--m);color:#fff}
+.sum .saldo small{color:#ffd6ea}
+.bar{height:10px;border-radius:9px;background:rgba(255,255,255,.3);margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:#fff;border-radius:9px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+form{display:grid;gap:10px}
+label{font-size:.82rem;font-weight:600;color:var(--mu)}
+input,select{width:100%;padding:10px 12px;border:1.5px solid var(--ln);border-radius:14px;background:var(--bg);color:var(--tx);font:inherit}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--m);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button.go{background:var(--m);color:#fff;border:0;border-radius:99px;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer}
+button.go:hover{background:var(--md)}
+ul{list-style:none;margin:12px 0 0;padding:0}
+li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--ln)}
+li:last-child{border:0}
+li .t{font-weight:600}li .s{font-size:.8rem;color:var(--mu)}
+.in{color:var(--ok);font-weight:700}.out{color:var(--warn);font-weight:700}
+.x{border:0;background:var(--ml);color:var(--m);border-radius:50%;width:28px;height:28px;cursor:pointer;font-weight:700}
+.empty{color:var(--mu);text-align:center;padding:14px;font-style:italic}
+.days{display:flex;align-items:flex-end;gap:4px;height:150px;overflow-x:auto;padding-bottom:4px}
+.days div{flex:0 0 18px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:.6rem;color:var(--mu)}
+.days span{display:block;width:100%;background:linear-gradient(var(--m),var(--md));border-radius:6px 6px 2px 2px;min-height:2px}
+.donut{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ring{width:130px;height:130px;border-radius:50%;flex:none;position:relative}
+.ring:after{content:"";position:absolute;inset:28px;background:var(--card);border-radius:50%}
+.leg{flex:1;min-width:140px;font-size:.88rem}
+.leg p{margin:3px 0;display:flex;justify-content:space-between;gap:8px}
+.leg em{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.cmp{display:grid;gap:8px;margin-top:6px}
+.cmp div{height:26px;border-radius:99px;background:var(--ml);overflow:hidden}
+.cmp i{display:block;height:100%;border-radius:99px;min-width:4px}
+.cmp small{display:flex;justify-content:space-between;font-weight:600;margin-bottom:2px}
+footer{text-align:center;color:var(--mu);font-family:'Playfair Display',Georgia,serif;font-style:italic;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>My Sweet Wallet</h1>
+  <p>catat setiap rupiah dengan manis ♡</p>
+  <label class="mon">Bulan <input type="month" id="month" aria-label="Pilih bulan"></label>
+</header>
+
+<section class="sum">
+  <div class="card"><small>Pemasukan bulan ini</small><b class="in" id="sIn">Rp0</b></div>
+  <div class="card"><small>Total pengeluaran</small><b class="out" id="sOut">Rp0</b></div>
+  <div class="card saldo"><small>Sisa saldo</small><b id="sBal">Rp0</b><div class="bar"><i id="sBar" style="width:0"></i></div><small id="sPct"></small></div>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>Pemasukan bulanan</h2>
+    <form id="fIn">
+      <div><label for="iSrc">Sumber pemasukan</label><input id="iSrc" required placeholder="Gaji, uang saku, freelance…"></div>
+      <div><label for="iAmt">Jumlah (Rp)</label><input id="iAmt" type="number" min="1" required placeholder="3000000"></div>
+      <button class="go" type="submit">Simpan pemasukan</button>
+    </form>
+    <ul id="lIn"></ul>
+  </div>
+  <div class="card">
+    <h2>Pengeluaran harian</h2>
+    <form id="fOut">
+      <div class="row">
+        <div><label for="oDate">Tanggal</label><input id="oDate" type="date" required></div>
+        <div><label for="oAmt">Jumlah (Rp)</label><input id="oAmt" type="number" min="1" required placeholder="25000"></div>
+      </div>
+      <div><label for="oPur">Untuk apa?</label><input id="oPur" required placeholder="Makan siang, skincare, ongkos…"></div>
+      <div><label for="oCat">Kategori</label><select id="oCat"></select></div>
+      <button class="go" type="submit">Catat pengeluaran</button>
+    </form>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>Pengeluaran per hari</h2>
+    <div class="days" id="days"></div>
+  </div>
+  <div class="card">
+    <h2>Pengeluaran per kategori</h2>
+    <div class="donut"><div class="ring" id="ring"></div><div class="leg" id="leg"></div></div>
+  </div>
+</section>
+
+<section class="card" style="margin-bottom:16px">
+  <h2>Pemasukan vs pengeluaran</h2>
+  <div class="cmp" id="cmp"></div>
+</section>
+
+<section class="card">
+  <h2>Riwayat pengeluaran</h2>
+  <ul id="hist"></ul>
+</section>
+
+<footer>dibuat dengan cinta untuk dompet yang bahagia</footer>
+</div>
+
+<script>
+var CATS=[['Makanan','#d3126f'],['Transport','#f06aa8'],['Belanja','#9c0b52'],['Tagihan','#b04bd0'],['Hiburan','#ff9ac8'],['Kecantikan','#e8479a'],['Lainnya','#7a5a8c']];
+var KEY='mysweetwallet-v1';
+var S={inc:[],exp:[]};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.inc&&p.exp)S=p;}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function $(i){return document.getElementById(i);}
+function rp(n){return 'Rp'+Math.round(n).toLocaleString('id-ID');}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function pad(n){return (n<10?'0':'')+n;}
+var now=new Date();
+$('month').value=now.getFullYear()+'-'+pad(now.getMonth()+1);
+$('oCat').innerHTML=CATS.map(function(c){return '<option>'+c[0]+'</option>';}).join('');
+function setDate(){var m=$('month').value,t=now.getFullYear()+'-'+pad(now.getMonth()+1);$('oDate').value=(m===t)?(t+'-'+pad(now.getDate())):(m+'-01');$('oDate').min=m+'-01';var y=+m.slice(0,4),mo=+m.slice(5);$('oDate').max=m+'-'+pad(new Date(y,mo,0).getDate());}
+function fmtDate(d){var a=d.split('-');return +a[2]+'/'+a[1]+'/'+a[0];}
+
+function render(){
+  var m=$('month').value;if(!m)return;
+  var inc=S.inc.filter(function(x){return x.month===m;});
+  var exp=S.exp.filter(function(x){return x.date.slice(0,7)===m;}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
+  var tIn=inc.reduce(function(s,x){return s+x.amt;},0),tOut=exp.reduce(function(s,x){return s+x.amt;},0),bal=tIn-tOut;
+  $('sIn').textContent=rp(tIn);$('sOut').textContent=rp(tOut);$('sBal').textContent=rp(bal);
+  var pct=tIn>0?Math.min(100,tOut/tIn*100):(tOut>0?100:0);
+  $('sBar').style.width=pct+'%';
+  $('sPct').textContent=tIn>0?(bal<0?'Pengeluaran melebihi pemasukan':Math.round(pct)+'% dari pemasukan terpakai'):'Tambahkan pemasukan bulan ini dulu ya';
+  $('lIn').innerHTML=inc.length?inc.map(function(x){return '<li><div><div class="t">'+esc(x.src)+'</div></div><div><span class="in">+'+rp(x.amt)+'</span> <button class="x" data-i="'+x.id+'" aria-label="Hapus pemasukan">×</button></div></li>';}).join(''):'<li class="empty">Belum ada pemasukan di bulan ini.</li>';
+  $('hist').innerHTML=exp.length?exp.map(function(x){return '<li><div><div class="t">'+esc(x.pur)+'</div><div class="s">'+fmtDate(x.date)+' · '+esc(x.cat)+'</div></div><div><span class="out">−'+rp(x.amt)+'</span> <button class="x" data-e="'+x.id+'" aria-label="Hapus pengeluaran">×</button></div></li>';}).join(''):'<li class="empty">Belum ada pengeluaran. Dompetmu masih utuh!</li>';
+  var y=+m.slice(0,4),mo=+m.slice(5),nd=new Date(y,mo,0).getDate(),per=[],mx=0,i;
+  for(i=0;i<nd;i++)per.push(0);
+  exp.forEach(function(x){per[+x.date.slice(8)-1]+=x.amt;});
+  per.forEach(function(v){if(v>mx)mx=v;});
+  $('days').innerHTML=per.map(function(v,k){return '<div title="Tgl '+(k+1)+': '+rp(v)+'"><span style="height:'+(mx?v/mx*100:0)+'%"></span>'+(k+1)+'</div>';}).join('');
+  var by={};exp.forEach(function(x){by[x.cat]=(by[x.cat]||0)+x.amt;});
+  var acc=0,stops=[],leg='';
+  CATS.forEach(function(c){var v=by[c[0]]||0;if(!v)return;var a=v/tOut*100;stops.push(c[1]+' '+acc+'% '+(acc+a)+'%');acc+=a;leg+='<p><span><em style="background:'+c[1]+'"></em>'+c[0]+'</span><b>'+Math.round(a)+'%</b></p>';});
+  $('ring').style.background=stops.length?'conic-gradient('+stops.join(',')+')':'var(--ml)';
+  $('leg').innerHTML=leg||'<p class="empty">Belum ada data.</p>';
+  var big=Math.max(tIn,tOut,1);
+  $('cmp').innerHTML='<div><small><span>Pemasukan</span><span>'+rp(tIn)+'</span></small><div><i style="width:'+tIn/big*100+'%;background:var(--ok)"></i></div></div><div><small><span>Pengeluaran</span><span>'+rp(tOut)+'</span></small><div><i style="width:'+tOut/big*100+'%;background:var(--m)"></i></div></div>';
+}
+
+$('month').addEventListener('change',function(){setDate();render();});
+$('fIn').addEventListener('submit',function(e){e.preventDefault();var a=+$('iAmt').value;if(!(a>0))return;S.inc.push({id:uid(),month:$('month').value,src:$('iSrc').value.trim(),amt:a});save();e.target.reset();render();});
+$('fOut').addEventListener('submit',function(e){e.preventDefault();var a=+$('oAmt').value;if(!(a>0))return;S.exp.push({id:uid(),date:$('oDate').value,amt:a,pur:$('oPur').value.trim(),cat:$('oCat').value});save();$('oAmt').value='';$('oPur').value='';render();});
+document.addEventListener('click',function(e){var t=e.target;if(t.dataset&&t.dataset.i){S.inc=S.inc.filter(function(x){return x.id!==t.dataset.i;});save();render();}if(t.dataset&&t.dataset.e){S.exp=S.exp.filter(function(x){return x.id!==t.dataset.e;});save();render();}});
+setDate();render();
+</script>
+</body>
+</html>
